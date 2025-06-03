@@ -1,3 +1,4 @@
+HEAD
 # 🎓 TeleTeach – Frontend
 
 Este es el repositorio oficial del **frontend del sistema TeleTeach**, una plataforma de capacitación digital dirigida a docentes que necesitan fortalecer sus competencias en herramientas de videoconferencia como Zoom, Meet y Discord.
@@ -25,11 +26,50 @@ Este frontend se comunica con dos microservicios REST:
 
 Todo el sistema forma parte del proyecto **TeleTeach - Castores**.
 
+# 🖥️ TeleTeach – Frontend
+
+Este repositorio contiene el frontend de la plataforma **TeleTeach**, una aplicación educativa enfocada en capacitar a docentes en el uso de herramientas de videoconferencia como **Zoom** y **Google Meet**.
+
+Forma parte del proyecto académico desarrollado para la materia **Ingeniería de Software 2 (2025-1)** bajo un enfoque de arquitectura **SOFEA**, con microservicios independientes para autenticación y gestión de cursos.
+
+---
+
+## 🚀 Tecnologías utilizadas
+
+- [Vite](https://vitejs.dev/) + React 18
+- [Tailwind CSS](https://tailwindcss.com/) para diseño responsivo
+- [React Router DOM](https://reactrouter.com/) para navegación tipo SPA
+- [Axios](https://axios-http.com/) para llamadas a APIs REST
+- [Dotenv](https://www.npmjs.com/package/dotenv) para variables de entorno
+- Backend conectado: [courses-api-teleteach](https://github.com/javiierbarco/courses-api-teleteach)
+
+---
+
+## 📂 Estructura del proyecto
+
+```
+frontend-teleteach/
+├── public/                        # Recursos estáticos (favicon, index.html)
+├── src/
+│   ├── components/                # Componentes principales (CourseList, CourseDetail, Home)
+│   ├── pages/                     # Páginas como Evaluation.jsx
+│   ├── services/                  # Axios service (courseService.js)
+│   ├── App.jsx                    # Control de navegación y vista principal
+│   ├── main.jsx                   # Entrada principal de la aplicación
+│   └── styles/                    # (opcional) Estilos personalizados
+├── .env                           # Configuración de endpoints por entorno
+├── .gitignore                     # Archivos y carpetas ignoradas por git
+├── package.json                   # Configuración de dependencias npm
+└── vite.config.js                 # Configuración de Vite
+```
+af6c089 (Versión inicial del frontend: estructura con Vite + integración a cursos API)
+
 ---
 
 ## ⚙️ Instalación y ejecución local
 
 ```bash
+HEAD
 # Clona el repositorio
 git clone https://github.com/javiierbarco/frontend-teleteach.git
 cd frontend-teleteach
@@ -96,10 +136,62 @@ src/
 - [API de Autenticación](https://github.com/javiierbarco/auth-api-teleteach)
 - [API de Cursos y Progreso](https://github.com/javiierbarco/courses-api-teleteach)
 
+# 1. Clona el repositorio
+git clone https://github.com/javiierbarco/frontend-teleteach.git
+cd frontend-teleteach
+
+# 2. Instala las dependencias
+npm install
+
+# 3. Crea el archivo de entorno
+cp .env.example .env
+
+# 4. Configura la URL de tu API de cursos en el archivo .env:
+VITE_API_COURSES_URL=http://localhost:8001/api/courses
+
+# 5. Inicia el servidor de desarrollo
+npm run dev
+```
+
+---
+
+## 📋 Funcionalidades implementadas
+
+- ✅ Vista de cursos cargados dinámicamente desde el backend
+- ✅ Detalle del curso con guía rápida y videotutorial embebido
+- ✅ Evaluación integrada para cada curso (3 preguntas)
+- ✅ Evaluación inicial sin correo, luego se migró a pedir correo
+- ✅ Componente `CourseDetail` con botón para activar quiz y calificación
+- ✅ Componente `Evaluation` (versión extendida con validación y POST a backend)
+- ✅ Navegación entre vista general y detalle (SPA sin recargas)
+
+---
+
+## 📌 Mejoras y pendientes futuros
+
+- 🔄 Integrar autenticación desde `auth-api-teleteach`
+- 📧 Notificación por email del resultado de la evaluación (en futuro)
+- 📊 Panel de administración para ver estadísticas de cursos completados
+- 🔐 Restringir acceso a evaluaciones a usuarios autenticados
+- 🌍 Soporte multilingüe e internacionalización
+
+---
+
+## 🔗 Microservicios relacionados
+
+- 🔐 [API de Autenticación – auth-api-teleteach](https://github.com/javiierbarco/auth-api-teleteach)
+- 🎓 [API de Cursos y Progreso – courses-api-teleteach](https://github.com/javiierbarco/courses-api-teleteach)
+ af6c089 (Versión inicial del frontend: estructura con Vite + integración a cursos API)
+
 ---
 
 ## 👥 Equipo Castores – Ingeniería de Software 2
 
+HEAD
+=======
+Desarrollado por el equipo 6 para la Universidad Nacional de Colombia – 2025-1:
+
+ af6c089 (Versión inicial del frontend: estructura con Vite + integración a cursos API)
 - Diego H. Lavado G.  
 - Estephanie Perez M.  
 - Frank S. Pardo A.  
@@ -108,8 +200,12 @@ src/
 - Victor M. Torres A.  
 - Wullfredo J. Barco G.
 
+ HEAD
+
 ---
 
 ## 📜 Licencia
 
 Uso académico – Universidad Nacional de Colombia – Ingeniería de Sistemas y Computación – 2025-1
+
+af6c089 (Versión inicial del frontend: estructura con Vite + integración a cursos API)
