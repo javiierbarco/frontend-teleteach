@@ -1,12 +1,23 @@
-// Importa React
+// Importa React y hooks necesarios
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 // Importa el componente CourseList que muestra los cursos
 import CourseList from './CourseList';
+
 // Importa el logo de TeleTeach desde la carpeta de assets
 import logo from '../assets/teleteach-logo.png'; // Asegúrate de tener esta imagen o cambia la ruta
 
 // Componente principal de bienvenida que también carga los cursos
 const Home = ({ onSelectCourse }) => {
+  const navigate = useNavigate();
+
+  // Maneja la selección de un curso
+  const handleCourseSelect = (course) => {
+    onSelectCourse(course);
+    navigate("/course");
+  };
+
   return (
     <div className="bg-gray-50 min-h-screen pb-10">
       {/* Sección de bienvenida y descripción */}
@@ -30,7 +41,7 @@ const Home = ({ onSelectCourse }) => {
 
       {/* Lista de cursos disponibles (cargada desde CourseList) */}
       <div className="mt-10">
-        <CourseList onSelectCourse={onSelectCourse} /> {/* Callback para seleccionar un curso */}
+        <CourseList onSelectCourse={handleCourseSelect} /> {/* Callback con navegación */}
       </div>
     </div>
   );

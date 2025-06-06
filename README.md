@@ -106,6 +106,9 @@ Asegúrate de que los servicios de backend estén ejecutándose en esas rutas.
 - Visualización del contenido por herramienta (Meet, Zoom)
 - Seguimiento visual del progreso en los cursos
 - Navegación protegida con autenticación
+- Registro e inicio de sesión conectados al microservicio auth-api-teleteach
+- Login y registro con validación de campos y manejo de errores del backend
+- Opción para continuar como invitado sin autenticación
 
 ---
 
@@ -164,6 +167,10 @@ npm run dev
 - ✅ Componente `CourseDetail` con botón para activar quiz y calificación
 - ✅ Componente `Evaluation` (versión extendida con validación y POST a backend)
 - ✅ Navegación entre vista general y detalle (SPA sin recargas)
+- ✅ Página Login.jsx con cambio dinámico entre login y registro
+- ✅ Conexión completa con /register y /login del microservicio de autenticación
+- ✅ Manejo de tokens JWT aún pendiente de implementar (si es el caso)
+- ✅ Botón para "Continuar como invitado" que redirige a /home sin autenticarse
 
 ---
 

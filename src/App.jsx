@@ -1,31 +1,49 @@
-// Importa React y el hook useState para manejar el estado del curso seleccionado
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-// Importa el componente Home que muestra la introducción y la lista de cursos
 import Home from './components/Home';
-
-// Importa el componente CourseDetail que muestra el contenido de un curso específico
 import CourseDetail from './components/CourseDetail';
+import Login from './pages/Login';
 
-// Componente principal de la aplicación
 function App() {
-  // Estado para almacenar el curso seleccionado; si es null se muestra Home
   const [selectedCourse, setSelectedCourse] = useState(null);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Si no hay curso seleccionado, muestra la página de inicio con la lista */}
-      {!selectedCourse ? (
-        <Home onSelectCourse={setSelectedCourse} /> // Pasa la función para seleccionar un curso
-      ) : (
-        <CourseDetail 
-          course={selectedCourse}                 // Pasa el curso seleccionado
-          onBack={() => setSelectedCourse(null)}  // Permite volver a la lista al quitar el curso
-        />
-      )}
-    </div>
+    <Router>
+      <div className="min-h-screen bg-gray-50">
+        <Routes>
+          {/* Ruta de inicio de sesión */}
+          <Route path="/login" element={<Login />} />
+
+          {/* Ruta principal con lista de cursos */}
+          <Route
+            path="/home"
+            element={
+              <Home onSelectCourse={setSelectedCourse} />
+            }
+          />
+
+          {/* Ruta para detalle del curso */}
+          <Route
+            path="/course"
+            element={
+              selectedCourse ? (
+                <CourseDetail
+                  course={selectedCourse}
+                  onBack={() => setSelectedCourse(null)}
+                />
+              ) : (
+                <Navigate to="/home" />
+              )
+            }
+          />
+
+          {/* Ruta por defecto redirige a login */}
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
-// Exporta el componente App como punto de entrada de la aplicación
 export default App;

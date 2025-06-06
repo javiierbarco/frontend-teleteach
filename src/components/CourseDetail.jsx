@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const CourseDetail = ({ course, onBack }) => {
+const CourseDetail = ({ course }) => {
+  const navigate = useNavigate();
   const isZoom = course.title.toLowerCase().includes("zoom");
   const isMeet = course.title.toLowerCase().includes("meet");
   const [showQuiz, setShowQuiz] = useState(false);
@@ -8,7 +10,7 @@ const CourseDetail = ({ course, onBack }) => {
 
   const handleToggleQuiz = () => {
     setShowQuiz(!showQuiz);
-    setScore(null); // Reinicia el puntaje si se oculta la evaluación
+    setScore(null);
   };
 
   const handleSubmit = () => {
@@ -29,7 +31,10 @@ const CourseDetail = ({ course, onBack }) => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
-      <button onClick={onBack} className="text-blue-600 underline mb-6 block text-sm sm:text-base">
+      <button
+        onClick={() => navigate("/home")}
+        className="text-blue-600 underline mb-6 block text-sm sm:text-base"
+      >
         &larr; Volver
       </button>
 

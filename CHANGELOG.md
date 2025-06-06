@@ -62,7 +62,47 @@ HEAD
 
 ## [0.2.1] - 2025-06-04
 ### 🔧 Mejoras menores
-- Placeholder y validación HTML para el campo de correo electrónico.
-- Se ajustaron paddings y márgenes en vista móvil.
-- Código comentado innecesario eliminado.
-af6c089 (Versión inicial del frontend: estructura con Vite + integración a cursos API)
+- Placeholder y validación HTML agregados al campo de correo electrónico en evaluación.
+- Se ajustaron paddings y márgenes para una mejor visualización en dispositivos móviles.
+- Eliminado código comentado innecesario en múltiples componentes.
+
+---
+
+## [0.2.0] - 2025-06-03
+### 🆕 Agregado
+- Nueva página `Evaluation.jsx` como ruta independiente, con validación de correo previa a evaluación.
+- Enrutamiento completo con `react-router-dom`, incluyendo `/curso/:id` y `/evaluacion`.
+- Soporte de navegación con `useLocation` para pasar datos entre vistas.
+
+### 🛠️ Modificado
+- `App.jsx`: se migró la lógica de navegación basada en estado a rutas explícitas.
+- `CourseDetail.jsx`: separadas claramente las secciones de contenido y evaluación.
+- Botón "Realizar evaluación" redirige correctamente a `/evaluacion`.
+
+### 🐛 Corregido
+- Se maneja adecuadamente el caso de cursos sin nivel definido (se muestra “básico”).
+- Se muestran mensajes de error cuando la API de cursos falla al responder.
+
+---
+
+## [0.1.1] - 2025-06-02
+### 🐛 Corregido
+- Validación de formularios en login y registro para prevenir envío con campos vacíos.
+
+### 🎨 Cambiado
+- Mejoras visuales en estilo de botones, formularios y tipografía.
+- Actualización de layout para mayor claridad en dispositivos móviles.
+
+---
+
+## [0.1.0] - 2025-06-02
+### 🆕 Agregado
+- Estructura inicial del proyecto con Vite + React.
+- Configuración base de TailwindCSS y PostCSS.
+- Componente `CourseList` para mostrar los cursos obtenidos desde la API REST.
+- Componente `CourseDetail` con visualización de contenido y evaluación para cursos de Zoom y Google Meet.
+- Página de evaluación incluida directamente en `CourseDetail`, con validación y feedback por puntaje.
+- Páginas básicas: Login, Registro, Dashboard.
+- Conexión inicial a APIs de autenticación y cursos.
+- Manejo básico de rutas protegidas con React Router.
+- Variables de entorno `.env` documentadas para integración local.
