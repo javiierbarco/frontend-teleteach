@@ -8,12 +8,12 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 
 // Importa el componente principal de la aplicación
-import App from './App.jsx'
+import App from './App.tsx'
 
 // Monta la aplicación dentro del elemento con id "root" en el HTML
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById('root')!).render(
   <StrictMode>
     {/* Renderiza la App dentro de StrictMode para verificar buenas prácticas en desarrollo */}
     <App />
-  </StrictMode>,
-)
+  </StrictMode>
+);
