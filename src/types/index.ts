@@ -22,6 +22,7 @@ export interface Course {
   thumbnail: string;
   tags: string[];
   createdAt: string;
+  ovaPath: string; // RUTA A LOS OVA
 }
 
 export interface Lesson {

@@ -11,6 +11,9 @@ export const mockCourses: Course[] = [
     thumbnail: 'https://images.pexels.com/photos/4491461/pexels-photo-4491461.jpeg?auto=compress&cs=tinysrgb&w=400',
     tags: ['zoom', 'básico', 'videoconferencia', 'aula virtual'],
     createdAt: '2024-01-15',
+
+    ovaPath: 'ova/zoom-fundamentos', // RUTA AL OVA
+    
     lessons: [
       {
         id: '1-1',
@@ -63,6 +66,7 @@ export const mockCourses: Course[] = [
       }
     ]
   },
+
   {
     id: '2',
     title: 'Google Meet Avanzado para Docentes',
@@ -73,6 +77,9 @@ export const mockCourses: Course[] = [
     thumbnail: 'https://images.pexels.com/photos/4145190/pexels-photo-4145190.jpeg?auto=compress&cs=tinysrgb&w=400',
     tags: ['google meet', 'intermedio', 'educación', 'colaboración'],
     createdAt: '2024-01-20',
+
+    ovaPath: '/ovas/meet.html', // RUTA AL OVA
+
     lessons: [
       {
         id: '2-1',
@@ -97,6 +104,7 @@ export const mockCourses: Course[] = [
       }
     ]
   },
+
   {
     id: '3',
     title: 'Discord para Comunidades Educativas',
@@ -107,6 +115,9 @@ export const mockCourses: Course[] = [
     thumbnail: 'https://images.pexels.com/photos/5428836/pexels-photo-5428836.jpeg?auto=compress&cs=tinysrgb&w=400',
     tags: ['discord', 'avanzado', 'comunidad', 'moderación'],
     createdAt: '2024-01-25',
+
+    ovaPath: 'ova/discord-comunidades', // RUTA AL OVA
+    
     lessons: [
       {
         id: '3-1',

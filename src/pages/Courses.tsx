@@ -101,10 +101,11 @@ export const Courses: React.FC = () => {
           {showFilters && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor='platforma' className="block text-sm font-medium text-gray-700 mb-1">
                   Plataforma
                 </label>
                 <select
+                  id='platforma'
                   value={selectedPlatform}
                   onChange={(e) => setSelectedPlatform(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
@@ -116,10 +117,11 @@ export const Courses: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor='dificultad' className="block text-sm font-medium text-gray-700 mb-1">
                   Nivel de Dificultad
                 </label>
                 <select
+                  id='dificultad'
                   value={selectedDifficulty}
                   onChange={(e) => setSelectedDifficulty(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
