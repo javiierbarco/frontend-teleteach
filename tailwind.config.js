@@ -1,6 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  safelist: [
+    'bg-primary-600',
+    'bg-primary-800',
+    'bg-accent-500',
+    'bg-accent-400',
+    'bg-accent-600',
+    'text-primary-800',
+    'text-primary-600',
+  ],
   theme: {
     extend: {
       colors: {
