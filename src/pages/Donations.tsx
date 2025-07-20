@@ -1,10 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Heart, CreditCard, DollarSign, History, Check } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Modal } from '../components/ui/Modal';
-import { mockDonations } from '../data/mockData';
+import axios from 'axios';
+
+// Define la interfaz User si no la tienes ya para mayor tipado seguro
+interface User {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  registrationDate: string;
+  lastLogin: string;
+}
+
+interface Donation {
+  _id: string;
+  email: string;
+  amount: number;
+  paymentMethod: string;
+  donationDate: string;
+}
 
 export const Donations: React.FC = () => {
   const [showDonationModal, setShowDonationModal] = useState(false);
@@ -12,27 +31,93 @@ export const Donations: React.FC = () => {
   const [customAmount, setCustomAmount] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [donations, setDonations] = useState<Donation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const predefinedAmounts = [5, 10, 25, 50, 100];
 
-  const handleDonation = async () => {
-    setIsProcessing(true);
-    
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsProcessing(false);
-    setShowDonationModal(false);
-    setSelectedAmount(null);
-    setCustomAmount('');
-    
-    // Show success message (you could implement a toast notification here)
-    alert('¡Gracias por tu donación! Tu apoyo es muy importante para nosotros.');
+  const fetchDonations = async () => {
+    try {
+      const storedUser = localStorage.getItem('teleteach_user');
+      if (!storedUser) {
+        setIsLoading(false);
+        return;
+      }
+
+      const user: User = JSON.parse(storedUser);
+      const response = await axios.get(`http://localhost:8888/donations?email=${user.email}`);
+      console.log(response.data);
+      setDonations(response.data);
+    } catch (error) {
+      console.error('Error al cargar las donaciones:', error);
+      setDonations([]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const totalDonated = mockDonations
-    .filter(donation => donation.status === 'completed')
-    .reduce((sum, donation) => sum + donation.amount, 0);
+  useEffect(() => {
+    fetchDonations();
+  }, []);
+  
+  const handleDonation = async () => {
+    setIsProcessing(true);
+
+    const amountToDonate = selectedAmount || parseFloat(customAmount);
+
+    if (!amountToDonate || isNaN(amountToDonate) || amountToDonate <= 0) {
+      alert('Por favor, selecciona o ingresa un monto de donación válido.');
+      setIsProcessing(false);
+      return;
+    }
+
+    // Obtener la fecha y hora actual
+    const donationDate = new Date().toISOString();
+    let userEmail = 'anonymous@example.com';
+
+    try {
+      const storedUser = localStorage.getItem('teleteach_user');
+      if (storedUser) {
+        const user: User = JSON.parse(storedUser);
+        userEmail = user.email;
+      }
+    } catch (parseError) {
+      console.error("Error al parsear el usuario de localStorage:", parseError);
+    }
+
+    try {
+      const response = await axios.post('http://localhost:8888/donate', {
+        email: userEmail,
+        paymentMethod: paymentMethod,
+        amount: amountToDonate,
+        donationDate: donationDate,
+      });
+
+      if (response.status === 201) {
+        alert('¡Gracias por tu donación! Tu apoyo es muy importante para nosotros.');
+        
+        // Recargar las donaciones después de una donación exitosa
+        await fetchDonations();
+      } else {
+        alert(`Error inesperado al procesar la donación. Código: ${response.status}`);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        alert(`Error al procesar la donación: ${error.response.data.msg || 'Inténtalo de nuevo.'}`);
+      } else {
+        console.error('Error al enviar la donación:', error);
+        alert('Hubo un problema al conectar con el servidor. Inténtalo de nuevo más tarde.');
+      }
+    } finally {
+      setIsProcessing(false);
+      setShowDonationModal(false);
+      setSelectedAmount(null);
+      setCustomAmount('');
+    }
+  };
+
+  // Calcular el total usando las donaciones reales de la API
+  const totalDonated = donations.reduce((sum, donation) => sum + donation.amount, 0);
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -57,7 +142,7 @@ export const Donations: React.FC = () => {
             <DollarSign className="h-6 w-6 text-green-600" />
           </div>
           <h3 className="text-2xl font-bold text-primary-800 mb-1">
-            ${totalDonated}
+            ${isLoading ? '...' : totalDonated}
           </h3>
           <p className="text-gray-600">Total Donado</p>
         </Card>
@@ -67,7 +152,7 @@ export const Donations: React.FC = () => {
             <Heart className="h-6 w-6 text-blue-600" />
           </div>
           <h3 className="text-2xl font-bold text-primary-800 mb-1">
-            {mockDonations.length}
+            {isLoading ? '...' : donations.length}
           </h3>
           <p className="text-gray-600">Donaciones Realizadas</p>
         </Card>
@@ -188,32 +273,29 @@ export const Donations: React.FC = () => {
           </h2>
         </div>
 
-        {mockDonations.length > 0 ? (
+        {isLoading ? (
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-3"></div>
+            <p className="text-gray-500">Cargando historial...</p>
+          </div>
+        ) : donations.length > 0 ? (
           <div className="space-y-4">
-            {mockDonations.map((donation) => (
-              <div key={donation.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            {donations.map((donation, index) => (
+              <div key={donation._id || index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center space-x-4">
-                  <div className={`w-3 h-3 rounded-full ${
-                    donation.status === 'completed' ? 'bg-green-500' :
-                    donation.status === 'pending' ? 'bg-yellow-500' : 'bg-red-500'
-                  }`}></div>
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
                   <div>
                     <p className="font-medium text-gray-900">
-                      ${donation.amount} {donation.currency}
+                      ${donation.amount} USD
                     </p>
                     <p className="text-sm text-gray-500">
-                      {new Date(donation.date).toLocaleDateString()} • {donation.paymentMethod}
+                      {new Date(donation.donationDate).toLocaleDateString('es-ES')} • {donation.paymentMethod}
                     </p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    donation.status === 'completed' ? 'bg-green-100 text-green-800' :
-                    donation.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
-                    {donation.status === 'completed' ? 'Completado' :
-                     donation.status === 'pending' ? 'Pendiente' : 'Fallido'}
+                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    Completado
                   </span>
                 </div>
               </div>
