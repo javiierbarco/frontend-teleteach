@@ -2,13 +2,20 @@
 import React, { useState } from "react";
 // Importa el hook useNavigate para cambiar de ruta
 import {Link, useNavigate } from "react-router-dom";
-// Importa axios para hacer peticiones HTTP
-import axios from "axios";
+// Importa el hook useAuth para acceder al contexto de autenticación y la función de login
+import { useAuth } from '../contexts/AuthContext';
 
 import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Card } from '../components/ui/Card';
+
+
+interface User {
+  email: string;
+  full_name: string;
+}
+
 
 
 export const Login: React.FC = () => {
@@ -20,6 +27,8 @@ export const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false); // Estado para manejar el loading
   const navigate = useNavigate();
 
+  // Usa el hook useAuth para acceder a las funciones del contexto de autenticación
+  const { login } = useAuth(); // Get the login function from AuthContext
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
@@ -33,38 +42,47 @@ export const Login: React.FC = () => {
     const newErrors: { [key: string]: string } = {};
     if (!formData.email) newErrors.email = 'El email es requerido';
     if (!formData.password) newErrors.password = 'La contraseña es requerida';
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
-    // const success = await login(formData.email, formData.password);
-    
     try {
       setIsLoading(true);
 
-      const res = await axios.post('http://localhost:5000/login', formData)
-      localStorage.setItem('user', JSON.stringify(res.data.user));
-      navigate('/dashboard');
-    } catch (err: any) {
-      const newAttemptCount = attemptCount + 1;
-      setAttemptCount(newAttemptCount);
+      // Call the login function from AuthContext
+      const success = await login(formData.email, formData.password);
 
-      if (newAttemptCount >= 3) {
-        setIsBlocked(true);
-        setErrors({ general: 'Demasiados intentos fallidos. Cuenta bloqueada temporalmente.' });
-        setTimeout(() => {
-          setIsBlocked(false);
-          setAttemptCount(0);
-        }, 300000); // 5 minutos
+      if (success) {
+        navigate('/dashboard'); // Navigate only if login was successful
       } else {
-        const errorMessage = err?.response?.data?.msg || 'Credenciales incorrectas';
-        setErrors({ general: `${errorMessage}. Te quedan ${3 - newAttemptCount} intentos restantes.` });
+        // Handle login failure, this might be redundant if AuthContext handles it,
+        // but useful for specific UI feedback in this component.
+        const newAttemptCount = attemptCount + 1;
+        setAttemptCount(newAttemptCount);
+
+        if (newAttemptCount >= 3) {
+          setIsBlocked(true);
+          setErrors({ general: 'Demasiados intentos fallidos. Cuenta bloqueada temporalmente.' });
+          setTimeout(() => {
+            setIsBlocked(false);
+            setAttemptCount(0);
+          }, 300000); // 5 minutos
+        } else {
+          // The AuthContext's login function handles displaying the specific message
+          // from the backend. Here, we're just providing a general message and attempt count.
+          setErrors({ general: `Credenciales incorrectas. Te quedan ${3 - newAttemptCount} intentos restantes.` });
+        }
       }
+    } catch (err: any) {
+      // This catch block will only execute if the 'login' function itself throws an uncaught error.
+      // Most API errors should be handled within the 'login' function in AuthContext.
+      console.error("An unexpected error occurred during login:", err);
+      setErrors({ general: 'Ocurrió un error inesperado al intentar iniciar sesión.' });
     } finally {
       setIsLoading(false);
-    }    
+    }
   };
 
   return (
@@ -160,57 +178,3 @@ export const Login: React.FC = () => {
   );
 };
 
-
-
-/*
-
-
-
-// Componente principal de Login y Registro
-const Login = () => {
-  const navigate = useNavigate(); // Permite redirigir a otra vista
-  const [isRegistering, setIsRegistering] = useState(false); // Alterna entre login y registro
-
-  // Estado para el formulario de inicio de sesión
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: ""
-  });
-
-  // Estado para el formulario de registro
-  const [registerData, setRegisterData] = useState({
-    full_name: "",
-    email: "",
-    password: ""
-  });
-
-  // Función que maneja el envío del formulario de login
-  const handleLogin = async (e) => {
-    e.preventDefault(); // Previene recarga de página
-    try {
-      const res = await axios.post("http://localhost:5000/login", loginData); // Llama al backend
-      localStorage.setItem("user", JSON.stringify(res.data.user)); // Guarda al usuario en localStorage
-      navigate("/home"); // Redirige a la página principal
-    } catch (err) {
-      // Muestra un mensaje de error personalizado si lo hay
-      const msg = err?.response?.data?.msg || "Error al iniciar sesión";
-      alert(msg);
-    }
-  };
-
-  // Función que maneja el envío del formulario de registro
-  const handleRegister = async (e) => {
-    e.preventDefault(); // Previene recarga de página
-    try {
-      const res = await axios.post("http://localhost:5000/register", registerData); // Envía datos al backend
-      alert("Usuario registrado correctamente");
-      setIsRegistering(false); // Cambia a modo login después de registrar
-    } catch (err) {
-      // Muestra mensaje de error del backend o genérico
-      const msg = err?.response?.data?.msg || "Error al registrar usuario";
-      alert(msg);
-    }
-  };
-*/
-
-export default Login;
