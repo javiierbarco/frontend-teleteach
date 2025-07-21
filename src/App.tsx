@@ -9,6 +9,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Courses } from './pages/Courses';
 import { Profile } from './pages/Profile';
 import { Donations } from './pages/Donations';
+import { OvaViewer } from './pages/OvaViewer';
 
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -58,6 +59,12 @@ function AppContent() {
         <Route path="/courses" element={
           <ProtectedRoute>
             <Courses />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/course/:id" element={
+          <ProtectedRoute>
+            <OvaViewer />
           </ProtectedRoute>
         } />
 
