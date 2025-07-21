@@ -12,7 +12,7 @@ export const mockCourses: Course[] = [
     tags: ['zoom', 'básico', 'videoconferencia', 'aula virtual'],
     createdAt: '2024-01-15',
 
-    ovaPath: 'ova/zoom-fundamentos', // RUTA AL OVA
+    ovaPath: 'https://view.genially.com/686b106e0a0e571a086f0e27', // RUTA AL OVA
     
     lessons: [
       {
@@ -116,7 +116,7 @@ export const mockCourses: Course[] = [
     tags: ['discord', 'avanzado', 'comunidad', 'moderación'],
     createdAt: '2024-01-25',
 
-    ovaPath: 'ova/discord-comunidades', // RUTA AL OVA
+    ovaPath: 'https://view.genially.com/6844b1b92feee6f90984f1a2', // RUTA AL OVA
     
     lessons: [
       {
