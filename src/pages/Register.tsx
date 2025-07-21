@@ -72,7 +72,8 @@ export const Register: React.FC = () => {
         alert('Usuario registrado correctamente. Por favor inicia sesión.');
         navigate('/login');
       } catch (err: any) {
-        const errorMessage = err.response?.data?.message || 'Error al registrar el usuario';
+        const errorMessage = err.response?.data?.msg || 'Error al registrar el usuario';
+        alert("Error:\n" + errorMessage);
         setErrors({ general: errorMessage });
       } finally {
         setIsLoading(false);  
