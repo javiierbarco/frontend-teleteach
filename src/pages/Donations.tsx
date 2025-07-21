@@ -313,6 +313,7 @@ export const Donations: React.FC = () => {
                 isLoading={isProcessing}
                 disabled={!selectedAmount && !customAmount}
                 className="flex-1"
+                data-testid="donate-submit-button"
               >
                 {isProcessing ? 'Procesando...' : 'Donar Ahora'}
               </Button>
